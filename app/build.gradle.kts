@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.tochanenko.khtoneskache"
-    compileSdkVersion(33)
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.tochanenko.khtoneskache"
