@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Khto Ne Skache"
-include ':app'
+include("app")
