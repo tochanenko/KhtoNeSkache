@@ -7,25 +7,25 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.daos.WorkoutDao
-import com.tochanenko.khtoneskache.database.daos.WorkoutExerciseDao
+import com.tochanenko.khtoneskache.database.daos.ExerciseSetDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.database.entities.WorkoutEntity
-import com.tochanenko.khtoneskache.database.entities.WorkoutExerciseEntity
+import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 
 @Database(
     entities = [
         ExerciseEntity::class,
         WorkoutEntity::class,
-        WorkoutExerciseEntity::class
+        ExerciseSetEntity::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun exerciseDao(): ExerciseDao
     abstract fun workoutDao(): WorkoutDao
-    abstract fun workoutExerciseDao(): WorkoutExerciseDao
+    abstract fun workoutExerciseDao(): ExerciseSetDao
 
     companion object {
         @Volatile

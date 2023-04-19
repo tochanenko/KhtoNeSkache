@@ -9,7 +9,7 @@ import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface WorkoutDao {
+interface ExerciseSetDao {
     @Insert
     suspend fun insert(workoutExerciseEntity: ExerciseSetEntity)
 
@@ -19,6 +19,6 @@ interface WorkoutDao {
     @Delete
     suspend fun delete(workoutExerciseEntity: ExerciseSetEntity)
 
-//    @Query("SELECT * FROM workout")
-//    fun fetchAllWorkouts(): Flow<List<ExerciseSetEntity>>
+    @Query("SELECT * FROM `exercise-set`")
+    fun fetchAllExerciseSets(): Flow<List<ExerciseSetEntity>>
 }
