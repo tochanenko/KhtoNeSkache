@@ -1,16 +1,18 @@
 package com.tochanenko.khtoneskache.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
 import com.tochanenko.khtoneskache.R
-import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExercisesBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseAdapter
 import kotlinx.coroutines.launch
+
 
 class ExercisesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExercisesBinding
@@ -38,6 +40,18 @@ class ExercisesActivity : AppCompatActivity() {
 
             binding.rvExercises.layoutManager = LinearLayoutManager(this)
             binding.rvExercises.adapter = exerciseAdapter
+
+            val dividerItemDecoration = DividerItemDecoration(
+                binding.rvExercises.context,
+                LinearLayoutManager(this).orientation
+            )
+            dividerItemDecoration.setDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    R.drawable.recycler_view_divider
+                )!!
+            )
+            binding.rvExercises.addItemDecoration(dividerItemDecoration)
         }
     }
 }
