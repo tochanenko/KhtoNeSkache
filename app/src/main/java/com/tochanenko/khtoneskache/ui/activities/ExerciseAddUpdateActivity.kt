@@ -36,7 +36,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
     }
 
     private fun fieldsEmpty(): Boolean {
-        return binding.etName.editText?.text.toString().isNullOrEmpty()
-                && binding.etDescription.editText?.text.toString().isNullOrEmpty()
+        return binding.etName.editText?.text.toString().isEmpty()
+                && binding.etDescription.editText?.text.toString().isEmpty()
     }
 }
