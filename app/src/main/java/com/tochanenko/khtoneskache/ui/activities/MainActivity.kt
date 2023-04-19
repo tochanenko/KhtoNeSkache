@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ExercisesActivity::class.java))
         }
 
+        binding.btnAddExercise.setOnClickListener {
+            startActivity(Intent(this, ExerciseAddUpdateActivity::class.java))
+        }
+
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
 
         binding.btnPopulateExercises.setOnClickListener {

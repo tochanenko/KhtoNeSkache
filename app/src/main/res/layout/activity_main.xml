@@ -6,24 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
 
-    <Button
-        android:id="@+id/btn_populateExercises"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_exercises"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Populate Exercises" />
-
-    <Button
-        android:id="@+id/btn_exercises"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btn_populateExercises"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Exercises" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_populateExercises"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Populate Exercises" />
+
+        <Button
+            android:id="@+id/btn_addExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Exercise" />
+
+        <Button
+            android:id="@+id/btn_exercises"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exercises" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
