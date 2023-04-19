@@ -1,4 +1,4 @@
-package com.tochanenko.khtoneskache.entities
+package com.tochanenko.khtoneskache.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class WorkoutEntity (
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var exerciseList: List<String>,
+    var exerciseList: List<Int>,
     var time: Long
 )

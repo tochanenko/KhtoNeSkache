@@ -1,11 +1,11 @@
-package com.tochanenko.khtoneskache.daos
+package com.tochanenko.khtoneskache.database.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.tochanenko.khtoneskache.entities.WorkoutExerciseEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutExerciseEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

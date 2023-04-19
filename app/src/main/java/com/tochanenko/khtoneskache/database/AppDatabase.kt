@@ -1,11 +1,16 @@
-package com.tochanenko.khtoneskache
+package com.tochanenko.khtoneskache.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.tochanenko.khtoneskache.daos.*
-import com.tochanenko.khtoneskache.entities.*
+import androidx.room.TypeConverters
+import com.tochanenko.khtoneskache.database.daos.ExerciseDao
+import com.tochanenko.khtoneskache.database.daos.WorkoutDao
+import com.tochanenko.khtoneskache.database.daos.WorkoutExerciseDao
+import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutExerciseEntity
 
 @Database(
     entities = [
@@ -15,6 +20,7 @@ import com.tochanenko.khtoneskache.entities.*
     ],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun exerciseDao(): ExerciseDao
