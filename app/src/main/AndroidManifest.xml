@@ -14,9 +14,12 @@
         android:theme="@style/Theme.KhtoNeSkache"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.ExerciseAddUpdateActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:name=".ui.activities.WorkoutAddUpdateActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activities.ExerciseAddUpdateActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activities.ExercisesActivity"
             android:exported="false" />

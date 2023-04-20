@@ -8,7 +8,9 @@ data class ExerciseSetEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var exerciseId: Int,
-    var duration: Int,
-    var times: Int,
-    var time: Long
+    var exerciseName: String,
+    var exerciseDescription: String,
+    var duration: Int = 0,
+    var times: Int = 0,
+    var time: Long = 0
 )

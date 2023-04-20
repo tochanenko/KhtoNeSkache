@@ -5,22 +5,22 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tochanenko.khtoneskache.R
-import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
-import com.tochanenko.khtoneskache.databinding.ExerciseItemRowBinding
+import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
+import com.tochanenko.khtoneskache.databinding.ExerciseCountedRowBinding
 
-class ExerciseAdapter(
-    private val items: ArrayList<ExerciseEntity>
-) : RecyclerView.Adapter<ExerciseAdapter.ViewHolder>() {
-    class ViewHolder(binding: ExerciseItemRowBinding): RecyclerView.ViewHolder(binding.root) {
-        val ivImage = binding.ivImage
+class SelectExercisesAdapter(
+    private val items: ArrayList<ExerciseSetEntity>
+) : RecyclerView.Adapter<SelectExercisesAdapter.ViewHolder>() {
+    class ViewHolder(binding: ExerciseCountedRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val tvName = binding.tvName
         val tvDescription = binding.tvDescription
+        val tvAmount = binding.tvAmount
         val clMain = binding.clMain
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ExerciseItemRowBinding.inflate(
+            ExerciseCountedRowBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -34,8 +34,9 @@ class ExerciseAdapter(
         val context = holder.itemView.context
         val item = items[position]
 
-        holder.tvName.text = item.name
-        holder.tvDescription.text = item.description
+        holder.tvName.text = item.exerciseName
+        holder.tvDescription.text = item.exerciseDescription
+        holder.tvAmount.text = getAmount(item.duration, item.times)
 
         if (position % 2 == 0) {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, androidx.appcompat.R.color.material_grey_100))
@@ -43,4 +44,11 @@ class ExerciseAdapter(
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
     }
+
+    private fun getAmount(duration: Int, times: Int): String =
+        if (times != 0) {
+            "$times reps."
+        } else if (duration > 61) {
+            "${duration / 60}:${duration % 60}"
+        } else "${duration}s"
 }

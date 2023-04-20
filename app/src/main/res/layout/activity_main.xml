@@ -34,6 +34,12 @@
             android:layout_height="wrap_content"
             android:text="Exercises" />
 
+        <Button
+            android:id="@+id/btn_addWorkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Workout" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
