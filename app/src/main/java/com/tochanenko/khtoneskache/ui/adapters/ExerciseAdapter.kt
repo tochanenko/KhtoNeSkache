@@ -10,7 +10,9 @@ import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ExerciseItemRowBinding
 
 class ExerciseAdapter(
-    private val items: ArrayList<ExerciseEntity>
+    private val items: ArrayList<ExerciseEntity>,
+    private val editListener: (id: Int) -> Unit,
+    private val deleteListener: (id: Int) -> Unit
 ) : RecyclerView.Adapter<ExerciseAdapter.ViewHolder>() {
     class ViewHolder(binding: ExerciseItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivImage = binding.ivImage
@@ -18,6 +20,8 @@ class ExerciseAdapter(
         val tvDescription = binding.tvDescription
         val tvMuscles = binding.tvMuscles
         val clMain = binding.clMain
+        val btnDelete = binding.btnDelete
+        val btnEdit = binding.btnEdit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,6 +55,14 @@ class ExerciseAdapter(
             )
         } else {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        }
+
+        holder.btnDelete.setOnClickListener {
+            deleteListener.invoke(position)
+        }
+
+        holder.btnEdit.setOnClickListener {
+            editListener.invoke(position)
         }
     }
 }

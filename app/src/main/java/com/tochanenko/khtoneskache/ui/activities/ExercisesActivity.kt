@@ -6,16 +6,21 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
+import com.tochanenko.khtoneskache.Muscle
 import com.tochanenko.khtoneskache.R
+import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExercisesBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseAdapter
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
 class ExercisesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExercisesBinding
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,19 +29,32 @@ class ExercisesActivity : AppCompatActivity() {
 
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
 
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+
         lifecycleScope.launch {
             exerciseDao.fetchAllExercises().collect {
                 val list = ArrayList(it)
-                setupRecyclerView(list)
+                setupRecyclerView(list, exerciseDao)
             }
         }
     }
 
     private fun setupRecyclerView(
-        exercises: ArrayList<ExerciseEntity>
+        exercises: ArrayList<ExerciseEntity>,
+        exerciseDao: ExerciseDao
     ) {
         if (exercises.isNotEmpty()) {
-            val exerciseAdapter = ExerciseAdapter(exercises)
+            val exerciseAdapter = ExerciseAdapter(
+                exercises,
+                deleteListener = { deleteId ->
+                    deleteExercise(
+                        deleteId,
+                        exerciseDao,
+                        exercises[deleteId].name
+                    )
+                },
+                editListener = { editId -> editExercise(editId, exerciseDao) }
+            )
 
             binding.rvExercises.layoutManager = LinearLayoutManager(this)
             binding.rvExercises.adapter = exerciseAdapter
@@ -53,5 +71,25 @@ class ExercisesActivity : AppCompatActivity() {
             )
             binding.rvExercises.addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    private fun deleteExercise(id: Int, exerciseDao: ExerciseDao, name: String) {
+        materialAlertDialogBuilder
+            .setTitle("Delete Exercise")
+            .setMessage("Do you want to delete $name? This operation can not be undone")
+            .setPositiveButton("Delete") { dialog, _ ->
+                lifecycleScope.launch {
+                    exerciseDao.delete(ExerciseEntity(id = id))
+                    dialog.dismiss()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun editExercise(id: Int, exerciseDao: ExerciseDao) {
+        
     }
 }

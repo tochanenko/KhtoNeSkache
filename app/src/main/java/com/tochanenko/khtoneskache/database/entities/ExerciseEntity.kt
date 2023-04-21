@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class ExerciseEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var name: String,
-    var description: String,
-    var image: String,
-    var muscles: List<Int>
+    var name: String = "",
+    var description: String = "",
+    var image: String = "",
+    var muscles: List<Int> = listOf()
 )
