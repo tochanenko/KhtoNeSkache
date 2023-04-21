@@ -1,5 +1,6 @@
 package com.tochanenko.khtoneskache.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -48,12 +49,12 @@ class ExercisesActivity : AppCompatActivity() {
                 exercises,
                 deleteListener = { deleteId ->
                     deleteExercise(
-                        deleteId,
+                        exercises[deleteId].id,
                         exerciseDao,
                         exercises[deleteId].name
                     )
                 },
-                editListener = { editId -> editExercise(editId, exerciseDao) }
+                editListener = { editId -> editExercise(exercises[editId].id) }
             )
 
             binding.rvExercises.layoutManager = LinearLayoutManager(this)
@@ -80,16 +81,20 @@ class ExercisesActivity : AppCompatActivity() {
             .setPositiveButton("Delete") { dialog, _ ->
                 lifecycleScope.launch {
                     exerciseDao.delete(ExerciseEntity(id = id))
+                    binding.rvExercises.adapter?.notifyDataSetChanged()
                     dialog.dismiss()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
+            .setCancelable(false)
             .show()
     }
 
-    private fun editExercise(id: Int, exerciseDao: ExerciseDao) {
-        
+    private fun editExercise(id: Int) {
+        val intent = Intent(this, ExerciseAddUpdateActivity::class.java)
+        intent.putExtra("EXERCISE_ID", id)
+        startActivity(intent)
     }
 }

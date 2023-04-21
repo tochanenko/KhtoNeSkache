@@ -23,6 +23,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
     private var muscles = arrayListOf<Int>()
+    private var exerciseId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,18 +31,45 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
+        exerciseId = intent.extras?.getInt("EXERCISE_ID") ?: -1
+
+        if (exerciseId != -1) {
+            lifecycleScope.launch {
+                exerciseDao.getExerciseById(exerciseId).collect {
+                    binding.etName.editText?.setText(it.name)
+                    binding.etDescription.editText?.setText(it.description)
+                    muscles = it.muscles.toCollection(ArrayList())
+                    binding.muscles.text = muscles.map { Muscle.fromId(it).title }.toString()
+                    // TODO Add image resource
+                    binding.btnAdd.text = "Edit Exercise"
+                }
+
+            }
+        }
 
         binding.btnAdd.setOnClickListener {
             if (!fieldsEmpty()) {
                 lifecycleScope.launch {
-                    exerciseDao.insert(
-                        ExerciseEntity(
-                            name = binding.etName.editText?.text.toString(),
-                            description = binding.etDescription.editText?.text.toString(),
-                            image = "",
-                            muscles = muscles.toList()
+                    if (exerciseId == -1) {
+                        exerciseDao.insert(
+                            ExerciseEntity(
+                                name = binding.etName.editText?.text.toString(),
+                                description = binding.etDescription.editText?.text.toString(),
+                                image = "",
+                                muscles = muscles.toList()
+                            )
                         )
-                    )
+                    } else {
+                        exerciseDao.update(
+                            ExerciseEntity(
+                                id = exerciseId,
+                                name = binding.etName.editText?.text.toString(),
+                                description = binding.etDescription.editText?.text.toString(),
+                                image = "",
+                                muscles = muscles.toList()
+                            )
+                        )
+                    }
                     finish()
                 }
             }
@@ -52,7 +80,6 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
         binding.btnAddMuscle.setOnClickListener {
             customAlertDialogView = LayoutInflater.from(this)
                 .inflate(R.layout.select_muscle_dialog, null, false)
-
             launchCustomAlertDialogForSelectedMuscle()
         }
     }
