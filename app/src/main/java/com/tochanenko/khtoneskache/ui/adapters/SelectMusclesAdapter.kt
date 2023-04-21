@@ -11,11 +11,16 @@ import com.tochanenko.khtoneskache.databinding.MuscleRowBinding
 class SelectMusclesAdapter(
     private val items: ArrayList<Muscle>
 ) : RecyclerView.Adapter<SelectMusclesAdapter.ViewHolder>() {
+
+    private var selectedItemPosition = -1
+
     class ViewHolder(binding: MuscleRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val tvName = binding.tvName
         val ivImage = binding.ivImage
         val clMain = binding.clMain
     }
+
+    fun getSelectedItem(): Int = items[selectedItemPosition].id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         MuscleRowBinding.inflate(
@@ -34,10 +39,20 @@ class SelectMusclesAdapter(
         holder.tvName.text = item.title
         // TODO Add Image resource from item.image
 
+        holder.clMain.setOnClickListener {
+            notifyItemChanged(selectedItemPosition)
+            notifyItemChanged(position)
+            selectedItemPosition = position
+        }
+
         if (position % 2 == 0) {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, androidx.appcompat.R.color.material_grey_100))
         } else {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        }
+
+        if (selectedItemPosition == position) {
+            holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.purple_500))
         }
     }
 }

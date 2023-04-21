@@ -44,5 +44,9 @@ enum class Muscle(
         8,
         "Shin",
         ""
-    )
+    );
+
+    companion object {
+        fun fromId(value: Int): Muscle = enumValues<Muscle>().first { it.id == value }
+    }
 }

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
         tools:context=".ui.activities.ExerciseAddUpdateActivity">
 
         <ImageView
@@ -19,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -28,10 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_image"
+            android:hint="Name"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="Name">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_image">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -44,10 +43,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_name"
+            android:hint="Description"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="Description">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -65,6 +64,19 @@
             tools:layout_editor_absoluteX="16dp" />
 
         <Button
+            android:id="@+id/btn_addMuscle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/purple_100"
+            android:text="Select Muscle"
+            android:textColor="@color/purple_500"
+            app:icon="@drawable/iv_add"
+            app:iconGravity="textStart"
+            app:iconTint="@color/purple_500"
+            app:layout_constraintTop_toBottomOf="@+id/muscles" />
+
+        <Button
             android:id="@+id/btn_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +84,7 @@
             android:text="Add Exercise"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/muscles" />
+            app:layout_constraintTop_toBottomOf="@id/btn_addMuscle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
