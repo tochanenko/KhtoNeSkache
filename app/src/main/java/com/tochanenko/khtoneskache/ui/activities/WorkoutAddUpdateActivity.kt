@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutAddUpdateBinding
@@ -14,6 +15,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutAddUpdateBinding
 
     private var exercises: ArrayList<ExerciseSetEntity> = arrayListOf()
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,8 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         }
 
         setupRecyclerView(exercises)
+
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
     }
 
     private fun setupRecyclerView(
