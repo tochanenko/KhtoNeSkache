@@ -22,7 +22,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseAddUpdateBinding
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
-    private var muscles = arrayListOf<Muscle>()
+    private var muscles = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
                             name = binding.etName.editText?.text.toString(),
                             description = binding.etDescription.editText?.text.toString(),
                             image = "",
-                            muscles = listOf()
+                            muscles = muscles.toList()
                         )
                     )
                     finish()
@@ -59,7 +59,8 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
 
     private fun fieldsEmpty(): Boolean {
         return binding.etName.editText?.text.toString().isEmpty()
-                && binding.etDescription.editText?.text.toString().isEmpty()
+                || binding.etDescription.editText?.text.toString().isEmpty()
+                || muscles.isEmpty()
     }
 
     private fun launchCustomAlertDialogForSelectedMuscle() {
@@ -71,10 +72,8 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
         materialAlertDialogBuilder.setView(customAlertDialogView)
             .setTitle("Select Muscle")
             .setPositiveButton("Select") { dialog, _ ->
-                muscles.add(
-                    Muscle.fromId(adapter?.getSelectedItem()!!)
-                )
-                binding.muscles.text = muscles.toString()
+                muscles.add(adapter?.getSelectedItem()!!)
+                binding.muscles.text = muscles.map { Muscle.fromId(it).title }.toString()
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->

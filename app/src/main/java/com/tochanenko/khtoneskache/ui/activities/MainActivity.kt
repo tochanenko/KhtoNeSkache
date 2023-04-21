@@ -37,19 +37,19 @@ class MainActivity : AppCompatActivity() {
                     name = "Підтягування",
                     description = "Підтягування руками на перекладені",
                     image = "Hello",
-                    muscles = listOf(0)
+                    muscles = listOf()
                 ))
                 exerciseDao.insert(ExerciseEntity(
                     name = "Віджимання",
                     description = "Віджимання обома руками від землі. Руки прямі 90 кут за тілом, а ноги прямі розставлені на ширині плечей.",
                     image = "Hello",
-                    muscles = listOf(0)
+                    muscles = listOf()
                 ))
                 exerciseDao.insert(ExerciseEntity(
                     name = "Прес",
                     description = "Качання пресу, коли дружбан притримує твої ніжки",
                     image = "Hello",
-                    muscles = listOf(0)
+                    muscles = listOf()
                 ))
             }
         }

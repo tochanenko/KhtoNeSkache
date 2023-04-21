@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.tochanenko.khtoneskache.Muscle
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ExerciseItemRowBinding
@@ -11,10 +12,11 @@ import com.tochanenko.khtoneskache.databinding.ExerciseItemRowBinding
 class ExerciseAdapter(
     private val items: ArrayList<ExerciseEntity>
 ) : RecyclerView.Adapter<ExerciseAdapter.ViewHolder>() {
-    class ViewHolder(binding: ExerciseItemRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: ExerciseItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivImage = binding.ivImage
         val tvName = binding.tvName
         val tvDescription = binding.tvDescription
+        val tvMuscles = binding.tvMuscles
         val clMain = binding.clMain
     }
 
@@ -36,9 +38,17 @@ class ExerciseAdapter(
 
         holder.tvName.text = item.name
         holder.tvDescription.text = item.description
+        holder.tvMuscles.text =
+            if (item.muscles.isEmpty()) "No Muscles are training"
+            else item.muscles.map { Muscle.fromId(it).title }.toString()
 
         if (position % 2 == 0) {
-            holder.clMain.setBackgroundColor(ContextCompat.getColor(context, androidx.appcompat.R.color.material_grey_100))
+            holder.clMain.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    androidx.appcompat.R.color.material_grey_100
+                )
+            )
         } else {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
