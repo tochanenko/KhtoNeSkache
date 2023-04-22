@@ -75,13 +75,13 @@ class ExercisesActivity : AppCompatActivity() {
     }
 
     private fun deleteExercise(id: Int, exerciseDao: ExerciseDao, name: String) {
+        // TODO Fix RecyclerView not updating on deletion of last exercise
         materialAlertDialogBuilder
             .setTitle("Delete Exercise")
             .setMessage("Do you want to delete $name? This operation can not be undone")
             .setPositiveButton("Delete") { dialog, _ ->
                 lifecycleScope.launch {
                     exerciseDao.delete(ExerciseEntity(id = id))
-                    binding.rvExercises.adapter?.notifyDataSetChanged()
                     dialog.dismiss()
                 }
             }

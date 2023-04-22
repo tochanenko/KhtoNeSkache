@@ -18,6 +18,7 @@ import com.tochanenko.khtoneskache.databinding.ActivityExerciseAddUpdateBinding
 import com.tochanenko.khtoneskache.ui.adapters.SelectMusclesAdapter
 import kotlinx.coroutines.launch
 
+// TODO Implement RecyclerView for Muscles
 class ExerciseAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseAddUpdateBinding
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
