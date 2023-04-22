@@ -2,6 +2,11 @@ package com.tochanenko.khtoneskache.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +34,18 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         setupRecyclerView(exercises)
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+
+        binding.btnSelectExercise.setOnClickListener {
+
+        }
+
+        binding.btnSelectAmount.setOnClickListener {
+
+        }
+
+        binding.btnSelectMeasure.setOnClickListener {
+            showMenu(it, R.menu.measure_menu)
+        }
     }
 
     private fun setupRecyclerView(
@@ -52,5 +69,19 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
             )
             binding.rvExercises.addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    private fun showMenu(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(applicationContext, v)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            Log.e("TVV", menuItem.toString())
+            true
+        }
+        popup.setOnDismissListener {
+            // Respond to popup being dismissed.
+        }
+        popup.show()
     }
 }

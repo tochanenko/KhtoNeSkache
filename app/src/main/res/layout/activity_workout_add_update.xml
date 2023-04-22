@@ -56,17 +56,52 @@
                 tools:itemCount="3"/>
 
             <Button
+                android:id="@+id/btn_selectExercise"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_height="50dp"
                 android:backgroundTint="@color/purple_100"
-                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                app:icon="@drawable/iv_add"
-                app:iconTint="@color/purple_500"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconSize="30sp"/>
+                android:text="Select Exercise"
+                style="@style/Widget.Material3.Button.TonalButton" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_selectAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/purple_100"
+                    android:layout_marginRight="8dp"
+                    android:text="Amount"
+                    style="@style/Widget.Material3.Button.TonalButton" />
+
+                <Button
+                    android:id="@+id/btn_selectMeasure"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/purple_100"
+                    android:layout_marginRight="8dp"
+                    android:text="Measure"
+                    style="@style/Widget.Material3.Button.TonalButton" />
+
+                <Button
+                    android:id="@+id/btn_selectDone"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/green_100"
+                    style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                    app:icon="@drawable/iv_check"
+                    app:iconTint="@color/green_500"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconSize="30sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
