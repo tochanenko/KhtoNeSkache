@@ -1,5 +1,6 @@
 package com.tochanenko.khtoneskache.ui.activities
 
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -39,10 +40,6 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
 
         }
 
-        binding.btnSelectAmount.setOnClickListener {
-
-        }
-
         binding.btnSelectMeasure.setOnClickListener {
             showMenu(it, R.menu.measure_menu)
         }
@@ -72,11 +69,19 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
     }
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(applicationContext, v)
+        val popup = PopupMenu(v.context, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
 
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            Log.e("TVV", menuItem.toString())
+            binding.btnSelectMeasure.backgroundTintList = ColorStateList.valueOf(getColor(R.color.green_100))
+            when (menuItem.itemId) {
+                R.id.option_times -> {
+                    binding.btnSelectMeasure.text = "Times"
+                }
+                R.id.option_seconds -> {
+                    binding.btnSelectMeasure.text = "Seconds"
+                }
+            }
             true
         }
         popup.setOnDismissListener {
