@@ -83,11 +83,10 @@
 
         <Button
             android:id="@+id/btn_selectMeasure"
-            style="@style/Widget.Material3.Button.TonalButton"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/purple_100"
             android:text="Measure" />
 
     </LinearLayout>

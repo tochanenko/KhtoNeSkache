@@ -1,17 +1,22 @@
 package com.tochanenko.khtoneskache.ui.activities
 
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
+import com.tochanenko.khtoneskache.Muscle
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
@@ -19,9 +24,13 @@ import com.tochanenko.khtoneskache.databinding.ActivityExerciseForWorkoutBinding
 import com.tochanenko.khtoneskache.databinding.BottomSheetSelectExerciseBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseSelectAdapter
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
 
 class ExerciseForWorkoutActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseForWorkoutBinding
+    private lateinit var exercises: ArrayList<ExerciseEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +41,8 @@ class ExerciseForWorkoutActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             exerciseDao.fetchAllExercises().collect {
-                val list = ArrayList(it)
-                setupRecyclerView(list, exerciseDao)
+                exercises = ArrayList(it)
+                setupRecyclerView(exercises, exerciseDao)
             }
         }
     }
@@ -67,6 +76,9 @@ class ExerciseForWorkoutActivity : AppCompatActivity() {
 
     private fun onItemClickListener(id: Int) {
         val modalBottomSheet = ModalBottomSheet()
+        val bundle = Bundle()
+        bundle.putString("exercise", Json.encodeToString(exercises[id]))
+        modalBottomSheet.arguments = bundle
         modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
     }
 }
@@ -86,7 +98,39 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomSheetBinding.tvName.text = "EXERCISE NAME"
+        val exercise: ExerciseEntity = Json.decodeFromString(arguments?.getString("exercise")!!)
+
+        bottomSheetBinding.tvName.text = exercise.name
+        bottomSheetBinding.tvDescription.text = exercise.description
+        bottomSheetBinding.tvMuscles.text =
+            if (exercise.muscles.isEmpty()) "No Muscles are training"
+            else exercise.muscles.map { Muscle.fromId(it).title }.toString()
+
+        bottomSheetBinding.btnSelectMeasure.setOnClickListener {
+            showMenu(it, R.menu.measure_menu)
+        }
+    }
+
+    private fun showMenu(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(v.context, v)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+//            bottomSheetBinding.btnSelectMeasure.backgroundTintList = ColorStateList.valueOf(getColor(R.color.green_100))
+            when (menuItem.itemId) {
+                R.id.option_times -> {
+                    bottomSheetBinding.btnSelectMeasure.text = "Times"
+                }
+                R.id.option_seconds -> {
+                    bottomSheetBinding.btnSelectMeasure.text = "Seconds"
+                }
+            }
+            true
+        }
+        popup.setOnDismissListener {
+            // Respond to popup being dismissed.
+        }
+        popup.show()
     }
 
     companion object {
