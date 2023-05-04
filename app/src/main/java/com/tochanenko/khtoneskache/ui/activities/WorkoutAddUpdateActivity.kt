@@ -1,14 +1,13 @@
 package com.tochanenko.khtoneskache.ui.activities
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
-import android.view.View
-import androidx.annotation.MenuRes
-import androidx.appcompat.widget.PopupMenu
+import android.text.TextUtils
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +16,7 @@ import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutAddUpdateBinding
 import com.tochanenko.khtoneskache.ui.adapters.SelectExercisesAdapter
+
 
 class WorkoutAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutAddUpdateBinding
@@ -37,13 +37,21 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
-        binding.btnSelectExercise.setOnClickListener {
-            startActivity(Intent(this, ExerciseForWorkoutActivity::class.java))
-        }
+        val activityResultLaunch: ActivityResultLauncher<Intent> = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            ActivityResultCallback<ActivityResult?> { result ->
+                if (result?.resultCode == 123) {
+                    val data: Intent = result.data!!
+                    val myStr = data.getStringExtra("MyData")
+                    if (!TextUtils.isEmpty(myStr)) {
+                        binding.tvTest.text = myStr
+                    }
+                }
+            })
 
-        /* binding.btnSelectMeasure.setOnClickListener {
-            showMenu(it, R.menu.measure_menu)
-        } */
+        binding.btnSelectExercise.setOnClickListener {
+            activityResultLaunch.launch(Intent(this, ExerciseForWorkoutActivity::class.java))
+        }
     }
 
     private fun setupRecyclerView(
@@ -68,26 +76,4 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
             binding.rvExercises.addItemDecoration(dividerItemDecoration)
         }
     }
-
-    /* private fun showMenu(v: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(v.context, v)
-        popup.menuInflater.inflate(menuRes, popup.menu)
-
-        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            binding.btnSelectMeasure.backgroundTintList = ColorStateList.valueOf(getColor(R.color.green_100))
-            when (menuItem.itemId) {
-                R.id.option_times -> {
-                    binding.btnSelectMeasure.text = "Times"
-                }
-                R.id.option_seconds -> {
-                    binding.btnSelectMeasure.text = "Seconds"
-                }
-            }
-            true
-        }
-        popup.setOnDismissListener {
-            // Respond to popup being dismissed.
-        }
-        popup.show()
-    } */
 }

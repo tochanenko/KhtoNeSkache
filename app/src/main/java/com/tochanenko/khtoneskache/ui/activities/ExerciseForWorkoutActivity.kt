@@ -1,14 +1,14 @@
 package com.tochanenko.khtoneskache.ui.activities
 
-import android.content.res.ColorStateList
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.MenuRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -24,13 +24,15 @@ import com.tochanenko.khtoneskache.databinding.ActivityExerciseForWorkoutBinding
 import com.tochanenko.khtoneskache.databinding.BottomSheetSelectExerciseBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseSelectAdapter
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
 
 class ExerciseForWorkoutActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseForWorkoutBinding
     private lateinit var exercises: ArrayList<ExerciseEntity>
+    private lateinit var modalBottomSheet: ModalBottomSheet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,24 +77,34 @@ class ExerciseForWorkoutActivity : AppCompatActivity() {
     }
 
     private fun onItemClickListener(id: Int) {
-        val modalBottomSheet = ModalBottomSheet()
+        modalBottomSheet = ModalBottomSheet { addExercise() }
         val bundle = Bundle()
         bundle.putString("exercise", Json.encodeToString(exercises[id]))
         modalBottomSheet.arguments = bundle
         modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
     }
+
+    private fun addExercise() {
+        val data: String = modalBottomSheet.binding.etAmount.editText?.text.toString()
+        val intent = Intent()
+        intent.putExtra("MyData", data)
+        setResult(123, intent)
+        finish()
+    }
 }
 
-class ModalBottomSheet : BottomSheetDialogFragment() {
-    private lateinit var bottomSheetBinding: BottomSheetSelectExerciseBinding
+class ModalBottomSheet(
+    private val doneListener: () -> Unit
+) : BottomSheetDialogFragment() {
+    lateinit var binding: BottomSheetSelectExerciseBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bottomSheetBinding = BottomSheetSelectExerciseBinding.inflate(inflater, container, false)
-        return bottomSheetBinding.root
+        binding = BottomSheetSelectExerciseBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,14 +112,18 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
 
         val exercise: ExerciseEntity = Json.decodeFromString(arguments?.getString("exercise")!!)
 
-        bottomSheetBinding.tvName.text = exercise.name
-        bottomSheetBinding.tvDescription.text = exercise.description
-        bottomSheetBinding.tvMuscles.text =
+        binding.tvName.text = exercise.name
+        binding.tvDescription.text = exercise.description
+        binding.tvMuscles.text =
             if (exercise.muscles.isEmpty()) "No Muscles are training"
             else exercise.muscles.map { Muscle.fromId(it).title }.toString()
 
-        bottomSheetBinding.btnSelectMeasure.setOnClickListener {
+        binding.btnSelectMeasure.setOnClickListener {
             showMenu(it, R.menu.measure_menu)
+        }
+
+        binding.btnSelectDone.setOnClickListener {
+            doneListener()
         }
     }
 
@@ -116,13 +132,16 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
         popup.menuInflater.inflate(menuRes, popup.menu)
 
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-//            bottomSheetBinding.btnSelectMeasure.backgroundTintList = ColorStateList.valueOf(getColor(R.color.green_100))
+//            bottomSheetBinding.btnSelectMeasure.backgroundTintList =
+//                ContextCompat.getColorStateList(requireActivity(), R.color.green_100)
+            binding.btnSelectMeasure.typeface = Typeface.DEFAULT_BOLD
+            binding.btnSelectMeasure.setTextColor(ContextCompat.getColor(requireActivity(), R.color.green_500))
             when (menuItem.itemId) {
                 R.id.option_times -> {
-                    bottomSheetBinding.btnSelectMeasure.text = "Times"
+                    binding.btnSelectMeasure.text = "Times"
                 }
                 R.id.option_seconds -> {
-                    bottomSheetBinding.btnSelectMeasure.text = "Seconds"
+                    binding.btnSelectMeasure.text = "Seconds"
                 }
             }
             true

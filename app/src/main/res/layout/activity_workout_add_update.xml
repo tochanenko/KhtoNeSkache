@@ -55,6 +55,11 @@
                 tools:listitem="@layout/exercise_counted_row"
                 tools:itemCount="3"/>
 
+            <TextView
+                android:id="@+id/tv_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <Button
                 android:id="@+id/btn_selectExercise"
                 android:layout_width="match_parent"
