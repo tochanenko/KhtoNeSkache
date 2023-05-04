@@ -14,7 +14,7 @@
         android:theme="@style/Theme.KhtoNeSkache"
         tools:targetApi="31">
         <activity
-            android:name=".ExerciseForWorkoutActivity"
+            android:name=".ui.activities.ExerciseForWorkoutActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.WorkoutAddUpdateActivity"

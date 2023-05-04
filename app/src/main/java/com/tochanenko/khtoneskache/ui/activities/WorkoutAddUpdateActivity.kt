@@ -1,5 +1,6 @@
 package com.tochanenko.khtoneskache.ui.activities
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,12 +38,12 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
         binding.btnSelectExercise.setOnClickListener {
-
+            startActivity(Intent(this, ExerciseForWorkoutActivity::class.java))
         }
 
-        binding.btnSelectMeasure.setOnClickListener {
+        /* binding.btnSelectMeasure.setOnClickListener {
             showMenu(it, R.menu.measure_menu)
-        }
+        } */
     }
 
     private fun setupRecyclerView(
@@ -68,7 +69,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMenu(v: View, @MenuRes menuRes: Int) {
+    /* private fun showMenu(v: View, @MenuRes menuRes: Int) {
         val popup = PopupMenu(v.context, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
 
@@ -88,5 +89,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
             // Respond to popup being dismissed.
         }
         popup.show()
-    }
+    } */
+
+
 }
