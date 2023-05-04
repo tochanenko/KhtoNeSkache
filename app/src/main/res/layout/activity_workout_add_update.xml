@@ -64,7 +64,6 @@
                 android:id="@+id/btn_selectExercise"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/purple_100"
                 android:text="Select Exercise"
                 style="@style/Widget.Material3.Button.TonalButton" />
 
