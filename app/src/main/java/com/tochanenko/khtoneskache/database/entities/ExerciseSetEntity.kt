@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class ExerciseSetEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    var workoutId: Long,
     var exerciseId: Int,
     var exerciseName: String,
     var exerciseDescription: String,

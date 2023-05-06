@@ -18,7 +18,7 @@ import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
         WorkoutEntity::class,
         ExerciseSetEntity::class
     ],
-    version = 4
+    version = 5
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {

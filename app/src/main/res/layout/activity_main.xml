@@ -35,6 +35,12 @@
             android:text="Exercises" />
 
         <Button
+            android:id="@+id/btn_workouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Workouts" />
+
+        <Button
             android:id="@+id/btn_addWorkout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

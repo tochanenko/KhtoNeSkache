@@ -18,6 +18,7 @@ import com.tochanenko.khtoneskache.KhtoNeSkacheApp
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutAddUpdateBinding
 import com.tochanenko.khtoneskache.ui.ActivityResultCode
 import com.tochanenko.khtoneskache.ui.adapters.SelectExercisesAdapter
@@ -30,6 +31,7 @@ import kotlinx.serialization.encodeToString
 class WorkoutAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutAddUpdateBinding
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+    private val workoutId = System.currentTimeMillis()
 
     private var exercises: ArrayList<ExerciseSetEntity> = arrayListOf()
 
@@ -39,7 +41,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnAdd.setOnClickListener {
-
+            saveWorkout()
         }
 
         setupRecyclerView(exercises)
@@ -57,22 +59,21 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
                     data.getStringExtra("exercise_entity")!!
                 )
 
-                val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
                 val newExercise = ExerciseSetEntity(
-                    0,
-                    exercise.id,
-                    exercise.name,
-                    exercise.description,
-                    if (exerciseAmountType == "Seconds") exerciseAmount.toInt() else 0,
-                    if (exerciseAmountType == "Times") exerciseAmount.toInt() else 0,
-                    0
+                    workoutId = workoutId,
+                    exerciseId = exercise.id,
+                    exerciseName = exercise.name,
+                    exerciseDescription = exercise.description,
+                    duration = if (exerciseAmountType == "Seconds") exerciseAmount.toInt() else 0,
+                    times = if (exerciseAmountType == "Times") exerciseAmount.toInt() else 0,
                 )
                 exercises.add(newExercise)
-
-                binding.rvExercises.adapter?.notifyItemInserted(exercises.size - 1)
-                    lifecycleScope.launch {
-                        exerciseSetDao.insert(newExercise)
-                    }
+                Log.e(
+                    "EXERCISE_ADD",
+                    "Name: ${newExercise.exerciseName}, $exerciseAmount $exerciseAmountType"
+                )
+//                binding.rvExercises.adapter?.notifyItemInserted(exercises.size - 1)
+                binding.rvExercises.adapter?.notifyDataSetChanged()
             }
         }
 
@@ -84,23 +85,41 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
     private fun setupRecyclerView(
         exercises: ArrayList<ExerciseSetEntity>
     ) {
-        if (exercises.isNotEmpty()) {
-            val selectExercisesAdapter = SelectExercisesAdapter(exercises)
+        val selectExercisesAdapter = SelectExercisesAdapter(exercises)
 
-            binding.rvExercises.layoutManager = LinearLayoutManager(this)
-            binding.rvExercises.adapter = selectExercisesAdapter
+        binding.rvExercises.layoutManager = LinearLayoutManager(this)
+        binding.rvExercises.adapter = selectExercisesAdapter
 
-            val dividerItemDecoration = DividerItemDecoration(
-                binding.rvExercises.context,
-                LinearLayoutManager(this).orientation
+        val dividerItemDecoration = DividerItemDecoration(
+            binding.rvExercises.context,
+            LinearLayoutManager(this).orientation
+        )
+        dividerItemDecoration.setDrawable(
+            ContextCompat.getDrawable(
+                applicationContext,
+                R.drawable.recycler_view_divider
+            )!!
+        )
+        binding.rvExercises.addItemDecoration(dividerItemDecoration)
+    }
+
+    private fun saveWorkout() {
+        val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
+        val workoutDao = (application as KhtoNeSkacheApp).db.workoutDao()
+
+        val name = binding.etName.editText?.text.toString()
+
+        lifecycleScope.launch {
+            workoutDao.insert(
+                WorkoutEntity(
+                    id = workoutId,
+                    name = name,
+                    time = 0
+                )
             )
-            dividerItemDecoration.setDrawable(
-                ContextCompat.getDrawable(
-                    applicationContext,
-                    R.drawable.recycler_view_divider
-                )!!
-            )
-            binding.rvExercises.addItemDecoration(dividerItemDecoration)
+            exerciseSetDao.insertAll(exercises)
+
+            finish()
         }
     }
 }

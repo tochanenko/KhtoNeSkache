@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "workout")
 data class WorkoutEntity (
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
-    var exerciseList: List<Int>,
+    @PrimaryKey
+    var id: Long = 0,
+    var name: String,
     var time: Long
 )
