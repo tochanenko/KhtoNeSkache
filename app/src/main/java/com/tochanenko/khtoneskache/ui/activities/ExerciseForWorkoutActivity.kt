@@ -22,6 +22,7 @@ import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExerciseForWorkoutBinding
 import com.tochanenko.khtoneskache.databinding.BottomSheetSelectExerciseBinding
+import com.tochanenko.khtoneskache.ui.ActivityResultCode
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseSelectAdapter
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -77,18 +78,28 @@ class ExerciseForWorkoutActivity : AppCompatActivity() {
     }
 
     private fun onItemClickListener(id: Int) {
-        modalBottomSheet = ModalBottomSheet { addExercise() }
+        modalBottomSheet = ModalBottomSheet { addExercise(exercises[id]) }
         val bundle = Bundle()
         bundle.putString("exercise", Json.encodeToString(exercises[id]))
         modalBottomSheet.arguments = bundle
         modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
     }
 
-    private fun addExercise() {
-        val data: String = modalBottomSheet.binding.etAmount.editText?.text.toString()
+    private fun addExercise(exercise: ExerciseEntity) {
         val intent = Intent()
-        intent.putExtra("MyData", data)
-        setResult(123, intent)
+        intent.putExtra(
+            "exercise_amount",
+            modalBottomSheet.binding.etAmount.editText?.text.toString()
+        )
+        intent.putExtra(
+            "exercise_amount_type",
+            modalBottomSheet.binding.btnSelectMeasure.text
+        )
+        intent.putExtra(
+            "exercise_entity",
+            Json.encodeToString(exercise)
+        )
+        setResult(ActivityResultCode.ADD_EXERCISE_TO_WORKOUT.value, intent)
         finish()
     }
 }
