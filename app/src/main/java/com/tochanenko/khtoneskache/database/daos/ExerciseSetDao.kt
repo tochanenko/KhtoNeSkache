@@ -35,4 +35,7 @@ interface ExerciseSetDao {
 
     @Query("UPDATE `exercise-set` SET exerciseName = :name, exerciseDescription = :description WHERE exerciseId = :id")
     fun updateExerciseSets(name: String, description: String, id: Int)
+
+    @Query("DELETE FROM `exercise-set` WHERE exerciseId = :id")
+    fun deleteExerciseSets(id: Int)
 }

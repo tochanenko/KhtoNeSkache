@@ -12,9 +12,11 @@ import com.tochanenko.khtoneskache.KhtoNeSkacheApp
 import com.tochanenko.khtoneskache.Muscle
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.daos.ExerciseDao
+import com.tochanenko.khtoneskache.database.daos.ExerciseSetDao
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExercisesBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -29,20 +31,22 @@ class ExercisesActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
+        val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
         lifecycleScope.launch {
             exerciseDao.fetchAllExercises().collect {
                 val list = ArrayList(it)
-                setupRecyclerView(list, exerciseDao)
+                setupRecyclerView(list, exerciseDao, exerciseSetDao)
             }
         }
     }
 
     private fun setupRecyclerView(
         exercises: ArrayList<ExerciseEntity>,
-        exerciseDao: ExerciseDao
+        exerciseDao: ExerciseDao,
+        exerciseSetDao: ExerciseSetDao
     ) {
         val exerciseAdapter = ExerciseAdapter(
             exercises,
@@ -50,6 +54,7 @@ class ExercisesActivity : AppCompatActivity() {
                 deleteExercise(
                     exercises[deleteId].id,
                     exerciseDao,
+                    exerciseSetDao,
                     exercises[deleteId].name
                 )
             },
@@ -73,14 +78,20 @@ class ExercisesActivity : AppCompatActivity() {
 
     }
 
-    private fun deleteExercise(id: Int, exerciseDao: ExerciseDao, name: String) {
+    private fun deleteExercise(
+        id: Int,
+        exerciseDao: ExerciseDao,
+        exerciseSetDao: ExerciseSetDao,
+        name: String
+    ) {
         // TODO Fix RecyclerView not updating on deletion of last exercise
         materialAlertDialogBuilder
             .setTitle("Delete Exercise")
-            .setMessage("Do you want to delete $name? This operation can not be undone")
+            .setMessage("Do you want to delete $name? This exercise will be also deleted from all Workouts. This operation can not be undone!")
             .setPositiveButton("Delete") { dialog, _ ->
-                lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     exerciseDao.delete(ExerciseEntity(id = id))
+                    exerciseSetDao.deleteExerciseSets(id)
                     dialog.dismiss()
                 }
             }
