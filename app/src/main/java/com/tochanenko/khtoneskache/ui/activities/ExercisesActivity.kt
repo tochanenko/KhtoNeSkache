@@ -44,34 +44,33 @@ class ExercisesActivity : AppCompatActivity() {
         exercises: ArrayList<ExerciseEntity>,
         exerciseDao: ExerciseDao
     ) {
-        if (exercises.isNotEmpty()) {
-            val exerciseAdapter = ExerciseAdapter(
-                exercises,
-                deleteListener = { deleteId ->
-                    deleteExercise(
-                        exercises[deleteId].id,
-                        exerciseDao,
-                        exercises[deleteId].name
-                    )
-                },
-                editListener = { editId -> editExercise(exercises[editId].id) }
-            )
+        val exerciseAdapter = ExerciseAdapter(
+            exercises,
+            deleteListener = { deleteId ->
+                deleteExercise(
+                    exercises[deleteId].id,
+                    exerciseDao,
+                    exercises[deleteId].name
+                )
+            },
+            editListener = { editId -> editExercise(exercises[editId].id) }
+        )
 
-            binding.rvExercises.layoutManager = LinearLayoutManager(this)
-            binding.rvExercises.adapter = exerciseAdapter
+        binding.rvExercises.layoutManager = LinearLayoutManager(this)
+        binding.rvExercises.adapter = exerciseAdapter
 
-            val dividerItemDecoration = DividerItemDecoration(
-                binding.rvExercises.context,
-                LinearLayoutManager(this).orientation
-            )
-            dividerItemDecoration.setDrawable(
-                ContextCompat.getDrawable(
-                    applicationContext,
-                    R.drawable.recycler_view_divider
-                )!!
-            )
-            binding.rvExercises.addItemDecoration(dividerItemDecoration)
-        }
+        val dividerItemDecoration = DividerItemDecoration(
+            binding.rvExercises.context,
+            LinearLayoutManager(this).orientation
+        )
+        dividerItemDecoration.setDrawable(
+            ContextCompat.getDrawable(
+                applicationContext,
+                R.drawable.recycler_view_divider
+            )!!
+        )
+        binding.rvExercises.addItemDecoration(dividerItemDecoration)
+
     }
 
     private fun deleteExercise(id: Int, exerciseDao: ExerciseDao, name: String) {

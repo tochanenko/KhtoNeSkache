@@ -3,11 +3,16 @@ package com.tochanenko.khtoneskache.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
+import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutsBinding
 import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
+import com.tochanenko.khtoneskache.ui.adapters.WorkoutAdapter
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
@@ -52,18 +57,40 @@ class WorkoutsActivity : AppCompatActivity() {
                         )
                     }
 
-                    Log.e("WKLOG", "All fetched info:")
-                    workouts.forEach {
-                        Log.e("WKLOG", "Workout: ${it.workout.name}")
-                        it.exercises.forEach { el ->
-                            Log.e(
-                                "WKLOG",
-                                "\t${el.exerciseName} : ${el.duration} / ${el.times}"
-                            )
-                        }
-                    }
+//                    Log.e("WKLOG", "All fetched info:")
+//                    workouts.forEach {
+//                        Log.e("WKLOG", "Workout: ${it.workout.name}")
+//                        it.exercises.forEach { el ->
+//                            Log.e(
+//                                "WKLOG",
+//                                "\t${el.exerciseName} : ${el.duration} / ${el.times}"
+//                            )
+//                        }
+//                    }
+                    setupRecyclerView(workouts)
                 }
             }
         }
+    }
+
+    private fun setupRecyclerView(
+        workouts: ArrayList<WorkoutWithExercisesEntity>
+    ) {
+        val workoutAdapter = WorkoutAdapter(
+            workouts,
+            deleteListener = { deleteId -> deleteWorkout(deleteId) },
+            editListener = { editId -> editWorkout(editId) }
+        )
+
+        binding.rvWorkouts.layoutManager = LinearLayoutManager(this)
+        binding.rvWorkouts.adapter = workoutAdapter
+    }
+
+    private fun editWorkout(id: Int) {
+
+    }
+
+    private fun deleteWorkout(id: Int) {
+
     }
 }

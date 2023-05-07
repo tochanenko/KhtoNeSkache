@@ -2,7 +2,12 @@ package com.tochanenko.khtoneskache.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tochanenko.khtoneskache.R
+import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.databinding.WorkoutRowBinding
 import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
 
@@ -44,7 +49,15 @@ class WorkoutAdapter(
             editListener.invoke(position)
         }
 
-        // TODO ListView with Exercises
-        holder.rvExercises
+        setupExercisesRecyclerView(holder, ArrayList(item.exercises))
+    }
+
+    private fun setupExercisesRecyclerView(
+        holder: ViewHolder,
+        exercises: ArrayList<ExerciseSetEntity>
+    ) {
+        val exerciseSetAdapter = WorkoutExercisesAdapter(exercises)
+        holder.rvExercises.layoutManager = LinearLayoutManager(holder.itemView.context)
+        holder.rvExercises.adapter = exerciseSetAdapter
     }
 }
