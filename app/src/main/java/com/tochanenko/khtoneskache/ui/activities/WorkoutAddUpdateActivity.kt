@@ -19,9 +19,12 @@ import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.database.entities.WorkoutEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutAddUpdateBinding
 import com.tochanenko.khtoneskache.ui.ActivityResultCode
 import com.tochanenko.khtoneskache.ui.adapters.SelectExercisesAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
@@ -31,7 +34,8 @@ import kotlinx.serialization.encodeToString
 class WorkoutAddUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutAddUpdateBinding
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
-    private val workoutId = System.currentTimeMillis()
+    private var workoutId = System.currentTimeMillis()
+    private var selectedWorkoutId: Long = -1
 
     private var exercises: ArrayList<ExerciseSetEntity> = arrayListOf()
 
@@ -40,11 +44,31 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
         binding = ActivityWorkoutAddUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
+        val workoutDao = (application as KhtoNeSkacheApp).db.workoutDao()
+        selectedWorkoutId = intent.extras?.getLong("WORKOUT_ID") ?: -1
+
+        if (selectedWorkoutId != -1L) {
+            workoutId = selectedWorkoutId
+            lifecycleScope.launch {
+                exerciseSetDao.fetchExercisesForWorkout(selectedWorkoutId).collect { exerciseSets ->
+                    workoutDao.getById(selectedWorkoutId).collect { workout ->
+                        binding.etName.editText?.setText(workout.name)
+                        exercises = ArrayList(exerciseSets)
+                        setupRecyclerView(exercises)
+
+                        // TODO Add image resource
+                        binding.btnAdd.text = "Edit Workout"
+                    }
+                }
+            }
+        } else {
+            setupRecyclerView(exercises)
+        }
+
         binding.btnAdd.setOnClickListener {
             saveWorkout()
         }
-
-        setupRecyclerView(exercises)
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
@@ -68,12 +92,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
                     times = if (exerciseAmountType == "Times") exerciseAmount.toInt() else 0,
                 )
                 exercises.add(newExercise)
-                Log.e(
-                    "EXERCISE_ADD",
-                    "Name: ${newExercise.exerciseName}, $exerciseAmount $exerciseAmountType"
-                )
-//                binding.rvExercises.adapter?.notifyItemInserted(exercises.size - 1)
-                binding.rvExercises.adapter?.notifyDataSetChanged()
+                binding.rvExercises.adapter?.notifyItemInserted(exercises.size - 1)
             }
         }
 
@@ -101,6 +120,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
             )!!
         )
         binding.rvExercises.addItemDecoration(dividerItemDecoration)
+
     }
 
     private fun saveWorkout() {
@@ -109,16 +129,16 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
 
         val name = binding.etName.editText?.text.toString()
 
-        lifecycleScope.launch {
-            workoutDao.insert(
-                WorkoutEntity(
-                    id = workoutId,
-                    name = name,
-                    time = 0
-                )
+        lifecycleScope.launch(Dispatchers.IO) {
+            val workout = WorkoutEntity(
+                id = workoutId,
+                name = name,
+                time = 0
             )
-            exerciseSetDao.insertAll(exercises)
 
+            exerciseSetDao.upsertAll(*exercises.toTypedArray())
+            workoutDao.upsert(workout)
+            
             finish()
         }
     }

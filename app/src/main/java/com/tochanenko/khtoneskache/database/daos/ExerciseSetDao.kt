@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
 import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,9 @@ interface ExerciseSetDao {
 
     @Update
     suspend fun update(exerciseSetEntity: ExerciseSetEntity)
+
+    @Upsert
+    fun upsertAll(vararg exerciseSetEntity: ExerciseSetEntity)
 
     @Delete
     suspend fun delete(exerciseSetEntity: ExerciseSetEntity)
