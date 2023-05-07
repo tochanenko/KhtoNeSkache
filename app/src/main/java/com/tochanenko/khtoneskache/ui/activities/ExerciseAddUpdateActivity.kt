@@ -16,6 +16,7 @@ import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExerciseAddUpdateBinding
 import com.tochanenko.khtoneskache.ui.adapters.SelectMusclesAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // TODO Implement RecyclerView for Muscles
@@ -32,6 +33,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
+        val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
         exerciseId = intent.extras?.getInt("EXERCISE_ID") ?: -1
 
         if (exerciseId != -1) {
@@ -50,7 +52,7 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
             if (!fieldsEmpty()) {
-                lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     if (exerciseId == -1) {
                         exerciseDao.insert(
                             ExerciseEntity(
@@ -69,6 +71,11 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
                                 image = "",
                                 muscles = muscles.toList()
                             )
+                        )
+                        exerciseSetDao.updateExerciseSets(
+                            name = binding.etName.editText?.text.toString(),
+                            description = binding.etDescription.editText?.text.toString(),
+                            id = exerciseId,
                         )
                     }
                     finish()

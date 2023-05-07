@@ -138,7 +138,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
 
             exerciseSetDao.upsertAll(*exercises.toTypedArray())
             workoutDao.upsert(workout)
-            
+
             finish()
         }
     }

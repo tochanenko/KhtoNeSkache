@@ -32,4 +32,7 @@ interface ExerciseSetDao {
 
     @Query("SELECT * FROM `exercise-set` WHERE workoutId = :id")
     fun fetchExercisesForWorkout(id: Long): Flow<List<ExerciseSetEntity>>
+
+    @Query("UPDATE `exercise-set` SET exerciseName = :name, exerciseDescription = :description WHERE exerciseId = :id")
+    fun updateExerciseSets(name: String, description: String, id: Int)
 }
