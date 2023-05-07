@@ -21,14 +21,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ExercisesActivity::class.java))
         }
 
-        binding.btnAddExercise.setOnClickListener {
-            startActivity(Intent(this, ExerciseAddUpdateActivity::class.java))
-        }
-
-        binding.btnAddWorkout.setOnClickListener {
-            startActivity(Intent(this, WorkoutAddUpdateActivity::class.java))
-        }
-
         binding.btnWorkouts.setOnClickListener {
             startActivity(Intent(this, WorkoutsActivity::class.java))
         }

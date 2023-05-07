@@ -3,9 +3,7 @@ package com.tochanenko.khtoneskache.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
@@ -32,6 +30,20 @@ class ExercisesActivity : AppCompatActivity() {
         val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+
+        binding.tbTop.setNavigationOnClickListener {
+            finish()
+        }
+
+        binding.tbTop.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.add -> {
+                    startActivity(Intent(this, ExerciseAddUpdateActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         lifecycleScope.launch {
             exerciseDao.fetchAllExercises().collect {
@@ -61,19 +73,6 @@ class ExercisesActivity : AppCompatActivity() {
 
         binding.rvExercises.layoutManager = LinearLayoutManager(this)
         binding.rvExercises.adapter = exerciseAdapter
-
-        val dividerItemDecoration = DividerItemDecoration(
-            binding.rvExercises.context,
-            LinearLayoutManager(this).orientation
-        )
-        dividerItemDecoration.setDrawable(
-            ContextCompat.getDrawable(
-                applicationContext,
-                R.drawable.recycler_view_divider
-            )!!
-        )
-        binding.rvExercises.addItemDecoration(dividerItemDecoration)
-
     }
 
     private fun deleteExercise(

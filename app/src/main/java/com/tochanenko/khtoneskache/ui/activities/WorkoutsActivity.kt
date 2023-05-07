@@ -46,6 +46,20 @@ class WorkoutsActivity : AppCompatActivity() {
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
+        binding.tbTop.setNavigationOnClickListener {
+            finish()
+        }
+
+        binding.tbTop.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.add -> {
+                    startActivity(Intent(this, WorkoutAddUpdateActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
         setupRecyclerView(workouts)
         fetchWorkouts()
     }
