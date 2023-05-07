@@ -10,15 +10,19 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.daos.ExerciseSetDao
 import com.tochanenko.khtoneskache.database.daos.WorkoutDao
+import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
+import com.tochanenko.khtoneskache.database.entities.WorkoutEntity
 import com.tochanenko.khtoneskache.databinding.ActivityWorkoutsBinding
 import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
 import com.tochanenko.khtoneskache.ui.ActivityResultCode
 import com.tochanenko.khtoneskache.ui.adapters.WorkoutAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
@@ -33,11 +37,14 @@ class WorkoutsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutsBinding
     private var workouts = arrayListOf<WorkoutWithExercisesEntity>()
     private var exercises = arrayListOf<ExerciseSetEntity>()
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkoutsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
         setupRecyclerView(workouts)
         fetchWorkouts()
@@ -46,9 +53,17 @@ class WorkoutsActivity : AppCompatActivity() {
     private fun setupRecyclerView(
         workouts: ArrayList<WorkoutWithExercisesEntity>
     ) {
+        val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
+        val workoutDao = (application as KhtoNeSkacheApp).db.workoutDao()
+
         val workoutAdapter = WorkoutAdapter(
             workouts,
-            deleteListener = { deleteId -> deleteWorkout(workouts[deleteId].workout.id) },
+            deleteListener = { deleteId -> deleteWorkout(
+                workouts[deleteId].workout.id,
+                workouts[deleteId].workout.name,
+                workoutDao,
+                exerciseSetDao
+            ) },
             editListener = { editId -> editWorkout(editId) }
         )
 
@@ -62,7 +77,35 @@ class WorkoutsActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun deleteWorkout(
+        id: Long,
+        name: String,
+        workoutDao: WorkoutDao,
+        exerciseSetDao: ExerciseSetDao
+    ) {
+        materialAlertDialogBuilder
+            .setTitle("Delete Workout?")
+            .setMessage("Do you want to delete $name? This operation can not be undone!")
+            .setPositiveButton("Delete") { dialog, _ ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    workoutDao.delete(WorkoutEntity(id = id))
+                    exerciseSetDao.deleteExerciseSetsByWorkoutId(id)
+                    workouts.clear()
+                    exercises.clear()
+                    dialog.dismiss()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
     private fun fetchWorkouts() {
+        workouts.clear()
+        exercises.clear()
+
         val workoutDao = (application as KhtoNeSkacheApp).db.workoutDao()
         val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
 
@@ -75,12 +118,8 @@ class WorkoutsActivity : AppCompatActivity() {
                 }.awaitAll()
             }.collect { workoutsNewList ->
                 workoutDao.fetchAllWorkouts().collect { workoutList ->
-                    workoutsNewList.forEach { a ->
-                        Log.e("WKLOG", "For workout: ${a.size}")
-                        exercises.addAll(a)
-                    }
+                    workoutsNewList.forEach { a -> exercises.addAll(a) }
 
-                    Log.e("WKLOG", "Workouts: ${workoutList.size}")
                     workoutList.forEach { workout ->
                         workouts.add(
                             WorkoutWithExercisesEntity(
@@ -98,12 +137,6 @@ class WorkoutsActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        workouts.clear()
-        exercises.clear()
         fetchWorkouts()
-    }
-
-    private fun deleteWorkout(id: Long) {
-
     }
 }

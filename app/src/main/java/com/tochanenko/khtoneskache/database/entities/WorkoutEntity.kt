@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class WorkoutEntity (
     @PrimaryKey
     var id: Long = 0,
-    var name: String,
-    var time: Long
+    var name: String = "",
+    var time: Long = 0
 )

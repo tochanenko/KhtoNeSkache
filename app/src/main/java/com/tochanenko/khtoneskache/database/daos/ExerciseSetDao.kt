@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
 import com.tochanenko.khtoneskache.database.entities.ExerciseSetEntity
-import com.tochanenko.khtoneskache.database.entities.WorkoutWithExercisesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -37,5 +36,8 @@ interface ExerciseSetDao {
     fun updateExerciseSets(name: String, description: String, id: Int)
 
     @Query("DELETE FROM `exercise-set` WHERE exerciseId = :id")
-    fun deleteExerciseSets(id: Int)
+    fun deleteExerciseSetsByExerciseId(id: Int)
+
+    @Query("DELETE FROM `exercise-set` WHERE workoutId = :id")
+    fun deleteExerciseSetsByWorkoutId(id: Long)
 }

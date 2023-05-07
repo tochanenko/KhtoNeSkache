@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tochanenko.khtoneskache.KhtoNeSkacheApp
-import com.tochanenko.khtoneskache.Muscle
 import com.tochanenko.khtoneskache.R
 import com.tochanenko.khtoneskache.database.daos.ExerciseDao
 import com.tochanenko.khtoneskache.database.daos.ExerciseSetDao
@@ -17,7 +16,6 @@ import com.tochanenko.khtoneskache.database.entities.ExerciseEntity
 import com.tochanenko.khtoneskache.databinding.ActivityExercisesBinding
 import com.tochanenko.khtoneskache.ui.adapters.ExerciseAdapter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -91,7 +89,7 @@ class ExercisesActivity : AppCompatActivity() {
             .setPositiveButton("Delete") { dialog, _ ->
                 lifecycleScope.launch(Dispatchers.IO) {
                     exerciseDao.delete(ExerciseEntity(id = id))
-                    exerciseSetDao.deleteExerciseSets(id)
+                    exerciseSetDao.deleteExerciseSetsByExerciseId(id)
                     dialog.dismiss()
                 }
             }
