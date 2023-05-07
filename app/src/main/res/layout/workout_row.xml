@@ -31,49 +31,48 @@
         android:layout_marginLeft="8dp"
         android:text="Name"
         android:textStyle="bold"
+        android:textSize="16dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
         app:layout_constraintStart_toEndOf="@id/iv_image"
         app:layout_constraintTop_toTopOf="@id/iv_image" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_exercises"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_image"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
-        tools:listitem="@layout/exercise_counted_simple_row">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_exercises"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/btn_edit"
+            tools:listitem="@layout/exercise_counted_simple_row">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
-    <Button
-        android:id="@+id/btn_delete"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        app:icon="@drawable/iv_delete"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="30sp"
-        app:iconTint="@color/red_500"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btn_delete"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:icon="@drawable/iv_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="20sp"
+            app:iconTint="@color/red_500"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_image" />
 
-    <Button
-        android:id="@+id/btn_edit"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        app:icon="@drawable/iv_edit"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="30sp"
-        app:iconTint="@color/purple_500"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-        app:layout_constraintEnd_toStartOf="@id/btn_delete"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btn_edit"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:icon="@drawable/iv_edit"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="20sp"
+            app:iconTint="@color/purple_500"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintTop_toTopOf="@+id/iv_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
