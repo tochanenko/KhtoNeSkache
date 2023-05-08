@@ -32,6 +32,10 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
         binding = ActivityExerciseAddUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.tbTop.setNavigationOnClickListener {
+            finish()
+        }
+
         val exerciseDao = (application as KhtoNeSkacheApp).db.exerciseDao()
         val exerciseSetDao = (application as KhtoNeSkacheApp).db.workoutExerciseDao()
         exerciseId = intent.extras?.getInt("EXERCISE_ID") ?: -1
@@ -44,13 +48,14 @@ class ExerciseAddUpdateActivity : AppCompatActivity() {
                     muscles = it.muscles.toCollection(ArrayList())
                     binding.muscles.text = muscles.map { Muscle.fromId(it).title }.toString()
                     // TODO Add image resource
-                    binding.btnAdd.text = "Edit Exercise"
+                    binding.fabAdd.text = "Save Changes"
+                    binding.tbTop.title = "Edit Exercise"
                 }
 
             }
         }
 
-        binding.btnAdd.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             if (!fieldsEmpty()) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     if (exerciseId == -1) {

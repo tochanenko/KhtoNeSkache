@@ -41,12 +41,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_exercises -> {
                     startActivity(Intent(this, ExercisesActivity::class.java))
                 }
-
                 R.id.nav_workouts -> {
                     startActivity(Intent(this, WorkoutsActivity::class.java))
                 }
-
-                else -> false
             }
             menuItem.isChecked = false
             binding.dlMain.close()
