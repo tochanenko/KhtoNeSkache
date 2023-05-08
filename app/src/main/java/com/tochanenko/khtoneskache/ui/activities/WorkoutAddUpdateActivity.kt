@@ -58,7 +58,8 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
                         setupRecyclerView(exercises)
 
                         // TODO Add image resource
-                        binding.btnAdd.text = "Edit Workout"
+                        binding.fabAdd.text = "Save Changes"
+                        binding.tbTop.title = "Edit Workout"
                     }
                 }
             }
@@ -66,7 +67,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
             setupRecyclerView(exercises)
         }
 
-        binding.btnAdd.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             saveWorkout()
         }
 
@@ -106,7 +107,7 @@ class WorkoutAddUpdateActivity : AppCompatActivity() {
     ) {
         val selectExercisesAdapter = SelectExercisesAdapter(exercises)
 
-        binding.rvExercises.layoutManager = LinearLayoutManager(this)
+        binding.rvExercises.layoutManager = object : LinearLayoutManager(this) { override fun canScrollVertically() = false }
         binding.rvExercises.adapter = selectExercisesAdapter
 
         val dividerItemDecoration = DividerItemDecoration(

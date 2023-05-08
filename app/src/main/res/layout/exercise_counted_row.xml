@@ -33,36 +33,37 @@
         android:layout_height="wrap_content"
         android:text="Times"
         android:textSize="20sp"
+        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_delete"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:icon="@drawable/iv_delete"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconSize="30sp"
-        app:iconTint="@color/red_500"
+        app:iconSize="20sp"
+        app:iconTint="?android:attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tv_name" />
 
     <Button
         android:id="@+id/btn_edit"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:icon="@drawable/iv_edit"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconSize="30sp"
-        app:iconTint="@color/purple_500"
+        app:iconSize="20sp"
+        app:iconTint="?android:attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_delete"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tv_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

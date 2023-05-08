@@ -54,16 +54,6 @@ class WorkoutsActivity : AppCompatActivity() {
             startActivity(Intent(this, WorkoutAddUpdateActivity::class.java))
         }
 
-        binding.tbTop.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.add -> {
-                    startActivity(Intent(this, WorkoutAddUpdateActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
-
         setupRecyclerView(workouts)
         fetchWorkouts()
     }

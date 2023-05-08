@@ -15,7 +15,6 @@
             android:id="@+id/tb_top"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/iv_arrow_back"
             app:title="Workouts" />
 
@@ -41,6 +40,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Record Exercise or Workout"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         android:text="Add Workout"
         app:icon="@drawable/iv_add" />
 

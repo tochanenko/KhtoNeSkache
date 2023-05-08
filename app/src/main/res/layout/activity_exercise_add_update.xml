@@ -106,6 +106,7 @@ android:fitsSystemWindows="true">
     android:layout_gravity="bottom|end"
     android:layout_margin="16dp"
     android:contentDescription="Record Exercise or Workout"
+    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
     android:text="Save"
     app:icon="@drawable/iv_done" />
 

@@ -39,7 +39,7 @@ class SelectExercisesAdapter(
         holder.tvAmount.text = getAmount(item.duration, item.times)
 
         if (position % 2 == 0) {
-            holder.clMain.setBackgroundColor(ContextCompat.getColor(context, androidx.appcompat.R.color.material_grey_100))
+            holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.purple_100))
         } else {
             holder.clMain.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
