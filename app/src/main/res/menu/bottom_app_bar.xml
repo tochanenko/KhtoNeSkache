@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_workouts"
-        android:icon="@drawable/iv_timer"
+        android:icon="@drawable/iv_sports"
         android:title="Workouts"
         android:contentDescription="Workouts"
         app:showAsAction="ifRoom"/>
@@ -13,5 +13,12 @@
         android:icon="@drawable/iv_run"
         android:title="Exercises"
         android:contentDescription="Exercises"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_item_settings"
+        android:icon="@drawable/iv_settings"
+        android:title="Settings"
+        android:contentDescription="Settings"
         app:showAsAction="ifRoom"/>
 </menu>

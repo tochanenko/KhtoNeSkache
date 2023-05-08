@@ -35,6 +35,10 @@ class ExercisesActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.fabAdd.setOnClickListener {
+            startActivity(Intent(this, ExerciseAddUpdateActivity::class.java))
+        }
+
         binding.tbTop.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.add -> {

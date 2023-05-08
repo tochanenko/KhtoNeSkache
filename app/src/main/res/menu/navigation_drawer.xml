@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_item"
+        android:title="Activities">
+        <menu>
+            <item
+                android:id="@+id/nav_workouts"
+                android:checkable="true"
+                android:icon="@drawable/iv_sports"
+                android:title="Workouts" />
+            <item
+                android:id="@+id/nav_exercises"
+                android:checkable="true"
+                android:icon="@drawable/iv_run"
+                android:title="Exercises" />
+
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/nav_settings"
+        android:checkable="true"
+        android:icon="@drawable/iv_settings"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/nav_about"
+        android:checkable="true"
+        android:icon="@drawable/iv_info"
+        android:title="About" />
+
+</menu>
